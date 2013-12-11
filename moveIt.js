@@ -5,6 +5,7 @@ var fs = require('fs');
 var util = require('util');
 var qs = require('querystring');
 var reg = require('./_js/loginControls.js');
+var io = require('socket.io').listen(3000);
 //
 
 http.createServer(function (req, res) {
@@ -12,6 +13,11 @@ http.createServer(function (req, res) {
     var extension = path.extname(pathName);
     //routes for pages
     if(pathName === '/'){
+        io.sockets.on('connection', function(socket){
+            var address = socket.handshake.address;
+            console.log('New connection from ' + address.address + ":" + address.port);
+        });
+
         fs.readFile('./index.html', function(err, html){
             if (err)
                 throw err;
@@ -66,7 +72,7 @@ http.createServer(function (req, res) {
 
 
 
-}).listen(1337, '127.0.0.1');
+}).listen(8080, '192.168.51.117');
 
 
 function popupateUsers(){
@@ -87,4 +93,4 @@ function checkIfUserIsLoggedIn(){
         return false;
     }
 }
-console.log('Server running at http://127.0.0.1:1337/');
+console.log('Server running');
