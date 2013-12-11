@@ -33,11 +33,14 @@ exports.loginControl = function(req, res, qs, util){
         var re = /\S+@\S+\.\S+/;
 
         if(_name =="" || _name =="Your name"){
-            console.log("please use a legitimate name");
+            res.write('<script>alert("Please use a legitimate name");</script>');
+            res.end();
         }else if(!re.test(_email)){
-            console.log("Please provide a valid email address");
+            res.write('<script>alert("Please provide a valid email address");</script>');
+            res.end();
         }else if(_password =="" || _password =="password"){
-            console.log("Please use a legitimate password");
+            res.write('<script>alert("Please use a legitimate password");</script>');
+            res.end();
         }
         else{
             //encrypt password with some really good encryption please!
@@ -47,23 +50,25 @@ exports.loginControl = function(req, res, qs, util){
 
     }
     function pushToDB(loginItems){
-        res.end();
         MongoClient.connect("mongodb://localhost:27017/moveIt", function(err, db){
-            console.log('connected to database');
             if(err) throw err;
-
-            var storedUsers = db.collection('users');
-                storedUsers.count({'email':loginItems.email}, function(err, items){
-                    if(items != 0){
-                        console.log('There is already a user with that email');
-                    }else{
-                        console.log('Push this new user to db!');
-                        storedUsers.insert(loginItems);
-                    }
-                });
-
-
-            //db.close();
+            //
+            var storedUsers = db.collection('users');//connect to users collection
+            //check to see if the user's email address is already in the database
+            storedUsers.count({'email':loginItems.email}, function(err, items){
+                if(items != 0){
+                    res.write('<script>alert("There is already a user with that email");</script>');
+                    res.end();
+                    db.close();
+                }else{//insert the new user's credentials to the database
+                    storedUsers.insert(loginItems, function(err, myInsert){
+                        if (err) throw err;
+                        res.write('<script>alert("Thanks for registering! Go Login");</script>');
+                        res.end();
+                        db.close();
+                    });
+                }
+            });
         });
     }
 };

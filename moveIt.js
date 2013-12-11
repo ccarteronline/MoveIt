@@ -2,7 +2,6 @@ var http = require('http');
 var url = require('url');
 var path = require('path');
 var fs = require('fs');
-var test = require('./test.js');
 var util = require('util');
 var qs = require('querystring');
 var loginStuff = require('./_js/loginControls.js');
