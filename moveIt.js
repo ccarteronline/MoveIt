@@ -31,6 +31,8 @@ http.createServer(function (req, res) {
         });
     }else if(pathName === '/register'){
         reg.register(req, res, qs,util);
+    }else if(pathName === '/login'){
+        reg.login(req, res, qs,util,loggedIn)
     }
     //routes for extensions loading in
     else if(extension === ".css"){
@@ -66,6 +68,14 @@ function popupateUsers(){
         storedUsers.insert(newUser);
         db.close();
     })
+}
+
+function checkIfUserIsLoggedIn(){
+    if(loggedIn){
+        return true;
+    }else{
+        return false;
+    }
 }
 
 
