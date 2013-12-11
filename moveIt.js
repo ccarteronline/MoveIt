@@ -4,7 +4,7 @@ var path = require('path');
 var fs = require('fs');
 var util = require('util');
 var qs = require('querystring');
-var loginStuff = require('./_js/loginControls.js');
+var reg = require('./_js/loginControls.js');
 //
 var loggedIn = false;
 
@@ -29,22 +29,20 @@ http.createServer(function (req, res) {
             res.write(html);
             res.end();
         });
-    }else if(pathName === '/loginHandler'){
-        loginStuff.loginControl(req, res, qs,util);
+    }else if(pathName === '/register'){
+        reg.register(req, res, qs,util);
     }
     //routes for extensions loading in
     else if(extension === ".css"){
         res.writeHead(200, {"Content-Type": "text/css"});
         fs.readFile('./'+ pathName, 'utf8', function(err, fd){
             res.end(fd);
-            console.log("routed for css");
         });
     }
     else if(extension === ".js"){
         res.writeHead(200, {"Content-Type": "text/javascript"});
         fs.readFile('./'+ pathName, 'utf8', function(err, fd){
             res.end(fd);
-            console.log("routed for js");
         });
     }else{
         res.writeHead(404, {'Content-Type': 'text/html'});

@@ -1,38 +1,27 @@
-exports.loginControl = function(req, res, qs, util){
+exports.register = function(req, res, qs, util){
+    //store mongo in variable
     var MongoClient = require('mongodb').MongoClient, format = require('util').format;
-    var assert = require('assert');
-    //
+    //use post method
     if(req.method == 'POST'){
-        //console.log('[200]', req.method, 'to', req.url);
         var fullBody = '';
         req.on('data', function(chunk){
             //append the current chunk of data to the fullBody variable
             fullBody += chunk.toString();
         });
         req.on('end', function(){
-            //request ended -> do something with the data
-            //res.writeHead(200, "OK", {'Content-Type':'text/html'});
-            //parse the received body data
-            var decodedBody = qs.parse(fullBody);
-
-            //output the decoded data to the HTTP response
-           // res.write('<html><head><title>Post Data</title></head><body><pre>');
-            //res.write(util.inspect(decodedBody));
+            var decodedBody = qs.parse(fullBody);//parse the content (name, email, password)
             validation(decodedBody.name, decodedBody.email, decodedBody.password);
-
-           // res.write('</pre></body></html>');
-           // res.end();
         });
     }else{
-        console.log('[405]' + req.method + ' to ' + req.url);
         res.writeHead(405, 'Method not supported', {'Content-Type': 'text/html'});
         res.end('<html><head><title>405 -Method not supported</title></head><bod><h1>Method not supported.</h1></bod></html>');
     }
 
     function validation(_name, _email, _password){
-        var re = /\S+@\S+\.\S+/;
+        var re = /\S+@\S+\.\S+/;//emal regex
 
-        if(_name =="" || _name =="Your name"){
+        //check name email and password to see if they are valid
+        if(_name =="" || _name =="Your name" || _name =="Your Name"){
             res.write('<script>alert("Please use a legitimate name");</script>');
             res.end();
         }else if(!re.test(_email)){
@@ -50,10 +39,12 @@ exports.loginControl = function(req, res, qs, util){
 
     }
     function pushToDB(loginItems){
+        //connect to the database and run db actions
         MongoClient.connect("mongodb://localhost:27017/moveIt", function(err, db){
             if(err) throw err;
             //
             var storedUsers = db.collection('users');//connect to users collection
+
             //check to see if the user's email address is already in the database
             storedUsers.count({'email':loginItems.email}, function(err, items){
                 if(items != 0){
@@ -68,8 +59,8 @@ exports.loginControl = function(req, res, qs, util){
                         db.close();
                     });
                 }
-            });
-        });
-    }
+            });//end storedUsers.count
+        });//end mongo connect
+    }//end pushtoDB
 };
 

@@ -3,32 +3,33 @@
     <head>
         <meta charset="UTF-8">
         <title>Move it</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css"/>
+        <scripts src="_js/bootstrap.min"></scripts>
         <link rel="stylesheet" href="css/main.css"/>
-        <script src="_js/main.js"></script>
+
     </head>
     <body>
-        <center>Welcome, please register</center>
-        <div id="signIn">
-            <form action="/loginHandler" method="post" >
-                <p><input type="text" value="Your name" id="registerName" name="name"></p>
-                <p><input type="text" value="Email" id="emailInput" name="email"/></p>
-                <p><input type="password" value="password" id="passInput" name="password"/></p>
-                <p><input type="submit" id="submit" value="submit"/> </p>
+        <center>
+            <h1><p>Hello!</p></h1>
+            <h4>Please <a href="#" onclick="regLog.toggle('login');">Login</a> below or <a href="#" onclick="regLog.toggle('register');">Register</a></h4>
+
+        </center>
+        <div id="loginAndRegister">
+            <form action="/login" method="post" role="form" id="loginForm">
+                <p><input type="text" value="Email" id="emailInput" name="email" class="form-control"/></p>
+                <p><input type="password" value="password" id="passInput" name="password" class="form-control"/></p>
+                <p><input type="submit" id="submit" value="login" class="btn"/> </p>
             </form>
 
+            <form action="/register" method="post" role="form" id="registerForm">
+                <p><input type="text" value="Your name" id="registerName" name="name" class="form-control"></p>
+                <p><input type="text" value="Email" id="emailInput" name="email" class="form-control"/></p>
+                <p><input type="password" value="password" id="passInput" name="password" class="form-control"/></p>
+                <p><input type="submit" id="submit" value="Register" class="btn"/> </p>
+            </form>
         </div>
     </body>
-    <script>
-
-
-//        document.getElementById('submit').onclick = function(){
-//            var myEmail = document.getElementById('emailInput').value;
-//            var myPassword = document.getElementById('passInput').value;
-//            myLogin.login(myEmail, myPassword);
-//        };
-
-
-    </script>
+    <script src="_js/main.js"></script>
 </html>
 
 
