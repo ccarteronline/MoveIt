@@ -1,0 +1,10 @@
+{
+  "name": "MoveIt!",
+  "version": "0.0.1",
+  "private": false,
+
+  "dependencies": {
+    "jade": "*",
+    "mongodb": "=1.2.13"
+  }
+}
