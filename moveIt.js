@@ -6,7 +6,6 @@ var util = require('util');
 var qs = require('querystring');
 var reg = require('./_js/loginControls.js');
 //
-var loggedIn = false;
 
 http.createServer(function (req, res) {
     var pathName = url.parse(req.url).pathname;
@@ -32,7 +31,18 @@ http.createServer(function (req, res) {
     }else if(pathName === '/register'){
         reg.register(req, res, qs,util);
     }else if(pathName === '/login'){
-        reg.login(req, res, qs,util,loggedIn)
+        reg.login(req, res, qs,util)
+    }else if(pathName === '/dashboard'){
+        if(reg.isLoggedIn()){
+            console.log('display user');
+            res.writeHead(200, {'Content-Type': 'text/html'});
+            res.write("<p>Welcome to the Dashboard</p>");
+            res.end();
+        }else{
+            res.writeHead(200, {'Content-Type': 'text/html'});
+            res.write("<p>You must log in to see this page</p>");
+            res.end();
+        }
     }
     //routes for extensions loading in
     else if(extension === ".css"){
@@ -77,14 +87,4 @@ function checkIfUserIsLoggedIn(){
         return false;
     }
 }
-
-
-
-
-
-
-
-
-
-
 console.log('Server running at http://127.0.0.1:1337/');

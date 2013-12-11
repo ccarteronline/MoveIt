@@ -1,5 +1,6 @@
 //store mongo in variable
 var MongoClient = require('mongodb').MongoClient, format = require('util').format;
+var loggedIn = false;//set logged in status as false
 
 exports.register = function(req, res, qs, util){
     //use post method
@@ -66,7 +67,9 @@ exports.register = function(req, res, qs, util){
     }//end pushtoDB
 };
 
-exports.login = function(req, res, qs, util,loggedIn){
+exports.login = function(req, res, qs, util){
+
+    //
     if(req.method == 'POST'){
         var fullBody = '';
         req.on('data', function(chunk){
@@ -113,15 +116,19 @@ exports.login = function(req, res, qs, util,loggedIn){
                 if(items == 0){
                     res.write('<script>alert("Sorry this user doesnt not exist, but you can register!");</script>');
                 }else{
-                    res.write('<script>alert("Great! you are logged in");</script>');
-                    loggedIn == true;
+                    //res.write('<script>alert("Great! you are logged in");</script>');
+                    loggedIn = true;
+                    res.writeHead(301,{'Location': './dashboard'});
+                    res.end();
                 }
-
-
-                });
-            });//end storedUsers.count
-        }//end mongo connect
+            });
+        });//end storedUsers.count
+    }//end mongo connect
 };//end pushtoDB
+
+exports.isLoggedIn = function(){
+    return loggedIn;
+}
 
 
 
